@@ -11,3 +11,4 @@ poetry install --sync -> команда удаляет все зависимос
 
 Команда poetry show --try : отобрасит все зависимости
 
+poetry add black --group dev - скачивание black в поетри

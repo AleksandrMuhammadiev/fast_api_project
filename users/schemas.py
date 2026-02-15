@@ -9,11 +9,12 @@ from annotated_types import MinLen, MaxLen
 class CreateUser(BaseModel):
     name: str
     # username: str = Field(..., min_length=5, max_length=20)
-    username: Annotated[str, MaxLen(5), MaxLen(20)]
+    username: Annotated[str, MinLen(5), MaxLen(20)]
     name: str
     email: EmailStr
     phone: str
     address: str
+
 
 # Что бы указать полю что туда должна попадать почта нужно скачать
 #  pip install pydantic[email]
