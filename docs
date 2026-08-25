@@ -6,9 +6,24 @@ poetry install --sync -> команда удаляет все зависимос
 после можно добавить нужные зависимости
 например  poetry add "pydantic[email]"
 
+
 но если выйдет ошибка с poetry.console, нужно переустановить в вертуалку
 библиотку poetry, после попробовать заново выполнить команду poetry add "pydantic[email]"
 
 Команда poetry show --try : отобрасит все зависимости
 
 poetry add black --group dev - скачивание black в поетри
+
+
+======================= Alembic ================
+
+alembic init -t async alembic - Создание папки алембик с настройками
+alembic revision -m "create new table" - команда для создания самой обычной миграции
+
+alembic revision --autogenerate -m "create_tabel_products_categories"  - команда для создания  миграции для моделей
+alembic upgrade head - команда что бы на основе миграций создались таблицы БД
+alembic downgrade -1  - откат миграции на шаг назад
+
+
+
+

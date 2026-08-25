@@ -1,17 +1,30 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI, Query, Path, Body
+from core.models import Base, db_helper
+from api_v1 import router as router_v1
+from core.config import settings
 
-# from items_views import router as users_router
-from users.views import router as users_router
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):  # Функция запуска движка для созданя БД и таблиц вней на основе моделей
+    async with db_helper.engine.begin() as conn:  # подключение и запуск движка
+        await conn.run_sync(Base.metadata.create_all)  # Асинхронный запуск всех моделей для создания таблиц
+
+    yield  # Пауза и работа приложения  (конец работы вопнения функции)
+
+
+app = FastAPI(lifespan=lifespan)
 # Подключили роутер к приложению для запуска вьюшек
-app.include_router(users_router)
+# app.include_router(users_router)
+app.include_router(router=router_v1, prefix=settings.api_v1_prefix)
 
 # pip install fastapi - Скачаивание библиотеки
 # pip install uvicorn - Библиотка для запуска локального сервера
 # uvicorn test:app --reload  Команда для запуска сервера
-# uvicorn test:app --reload  --port 8080  Команда для запуска сервера  с указанием порта
+# uvicorn main:app --reload  --port 8080  Команда для запуска сервера  с указанием порта
 # /redoc - Путь для перехода на страницу документации
 # /docs - переход на страницу автодокументации API  swagger
 
@@ -40,4 +53,4 @@ app.include_router(users_router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", reload=True, port=8080)
